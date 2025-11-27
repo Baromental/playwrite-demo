@@ -1,5 +1,5 @@
 {
-  "name": "playwrite-demo",
+  "name": "playwright-demo",
   "version": "1.0.0",
   "description": "Gmail Email Sender using Playwright",
   "main": "src/app.ts",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Baromental/playwrite-demo.git"
+    "url": "git+https://github.com/Baromental/playwright-demo.git"
   },
   "keywords": [
     "gmail",
@@ -21,9 +21,9 @@
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/Baromental/playwrite-demo/issues"
+    "url": "https://github.com/Baromental/playwright-demo/issues"
   },
-  "homepage": "https://github.com/Baromental/playwrite-demo#readme",
+  "homepage": "https://github.com/Baromental/playwright-demo#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
     "dotenv": "^16.0.3",

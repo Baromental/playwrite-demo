@@ -33,14 +33,33 @@ class EmailService {
     message, 
     attachmentPath 
   }: EmailOptions): Promise<EmailResult> => {
-    const browser: Browser = await chromium.launch({ 
-      headless: false, 
-      args: ['--disable-blink-features=AutomationControlled', '--disable-web-security'] 
-    });
+    const browser: Browser = await chromium.launch({
+    headless: true, 
+    channel: 'chromium',
+    args: [
+      '--disable-blink-features=AutomationControlled',
+      '--disable-dev-shm-usage',
+      '--no-sandbox'
+    ]
+  });
 
     try {
-      const context: BrowserContext = await browser.newContext();
+      const context: BrowserContext = await browser.newContext(
+        {
+          userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          viewport: { width: 1280, height: 720 },
+          locale: 'en-US',
+          timezoneId: 'America/New_York'
+        }
+      );
+
       const page: Page = await context.newPage();
+
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+          get: () => undefined
+        });
+      });
 
       await page.goto('https://mail.google.com');
 
@@ -88,7 +107,7 @@ class EmailService {
       }
 
       await page.click('div[role="button"].T-I.J-J5-Ji.aoO.T-I-atl.L3');
-      await page.waitForSelector('.bAq', { state: 'visible', timeout: 10000 });
+      await page.waitForSelector('.bAq', { state: 'visible', timeout: 20000 });
 
       return { 
         success: true, 

@@ -89,14 +89,15 @@ class EmailService {
       await page.waitForSelector('.T-I.T-I-KE.L3', { timeout: 10000 });
       await page.click('.T-I.T-I-KE.L3');
 
-      await page.waitForSelector('input[role="combobox"][aria-haspopup="listbox"]');
-      await page.fill('input[role="combobox"][aria-haspopup="listbox"]', to);
-        
-      await page.keyboard.press('Tab');
-      await page.keyboard.type(subject);
-        
-      await page.keyboard.press('Tab');
-      await page.keyboard.type(message);
+      const emailInput = page.locator('input[aria-label="To recipients"]');
+      await emailInput.fill(to);
+
+      const subjectInput = page.locator('input[name="subjectbox"]');
+      await subjectInput.fill(subject);
+
+      const body = page.locator('div[aria-label="Message Body"]');
+      await body.click();
+      await body.fill(message);
 
       if (attachmentPath) {
         const fileChooserPromise = page.waitForEvent('filechooser');
@@ -106,8 +107,9 @@ class EmailService {
         await page.waitForTimeout(10000);
       }
 
-      await page.click('div[role="button"].T-I.J-J5-Ji.aoO.T-I-atl.L3');
-      await page.waitForSelector('.bAq', { state: 'visible', timeout: 20000 });
+      const sendButton = page.getByRole('button', { name: /^send/i });
+      await sendButton.click();
+      await page.waitForSelector('.bAq', { state: 'visible', timeout: 30000 });
 
       return { 
         success: true, 
